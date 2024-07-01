@@ -5,7 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PassportModule } from '@nestjs/passport';
 import { GlobalModule } from './global/global.module';
-import { AccountModule } from './user/user.module';
+import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 
 @Module({
@@ -27,7 +27,7 @@ import { AuthModule } from './auth/auth.module';
     }),
     GlobalModule,
     AuthModule,
-    AccountModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],

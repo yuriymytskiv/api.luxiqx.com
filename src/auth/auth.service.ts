@@ -30,13 +30,18 @@ export class AuthService {
 
   // Gain JWT token
   async requestToken(email: string, password: string) {
-    const account = await this.validateAccount(email, password);
-    if (!account) {
+    const user = await this.validateUser(email, password);
+    if (!user) {
       return false;
     }
     const payload = {
-      sub: account.uuid,
-      username: account.username,
+      sub: user.uuid,
+      first_name: user.first_name,
+      last_name: user.last_name,
+      username: user.username,
+      email: user.email,
+      verified: user.verified,
+      vip: user.vip,
     };
     return {
       accessToken: this.jwtService.sign(payload, {
@@ -57,8 +62,13 @@ export class AuthService {
       requestRefreshTokenDto.refreshToken,
     );
     const payload = {
-      sub: decodedJwtPayload.sub,
+      sub: decodedJwtPayload.uuid,
+      first_name: decodedJwtPayload.first_name,
+      last_name: decodedJwtPayload.last_name,
       username: decodedJwtPayload.username,
+      email: decodedJwtPayload.email,
+      verified: decodedJwtPayload.verified,
+      vip: decodedJwtPayload.vip,
     };
     return {
       accessToken: this.jwtService.sign(payload, {
