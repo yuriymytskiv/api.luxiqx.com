@@ -8,7 +8,7 @@ async function bootstrap() {
   // App Initialization
   const app = await NestFactory.create(AppModule);
   // App Port
-  const port = process.env.APP_PORT ?? 3000;
+  const port = process.env.APP_PORT ?? 9000;
   // Global Pipes
   app.useGlobalPipes(new ValidationPipe());
   // Global Interceptors
