@@ -6,36 +6,26 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-import { v4 as uuidv4 } from 'uuid';
-
-@Entity('users')
-export class User {
+@Entity('application_files')
+export class ApplicationFile {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ unique: true, default: uuidv4() })
-  uuid: string;
+  @Column({ nullable: false })
+  application_uuid: string;
 
-  @Column()
-  first_name: string;
+  @Column({ nullable: false })
+  file_url: string;
 
-  @Column()
-  last_name: string;
+  @Column({ nullable: false })
+  file_path: string;
 
-  @Column({ unique: true })
-  username: string;
-
-  @Column({ unique: true })
-  email: string;
-
-  @Column({ default: 0 })
-  verified: boolean;
-
-  @Column({ default: 0 })
-  vip: boolean;
-
-  @Column()
-  password: string;
+  @Column({
+    nullable: false,
+    type: 'enum',
+    enum: ['image', 'video', 'audio', 'document'],
+  })
+  file_type: string;
 
   @CreateDateColumn({
     type: 'timestamp',

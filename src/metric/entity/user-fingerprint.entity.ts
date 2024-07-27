@@ -4,38 +4,32 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  Unique,
+  BeforeInsert,
 } from 'typeorm';
 
 import { v4 as uuidv4 } from 'uuid';
 
-@Entity('users')
-export class User {
+@Entity('user_fingerprints')
+@Unique(['ga_code', 'ip']) // Define composite unique constraint
+export class UserFingerprint {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ unique: true, default: uuidv4() })
+  @Column({ unique: true })
   uuid: string;
 
-  @Column()
-  first_name: string;
+  @Column({ nullable: false })
+  ga_code: string;
 
-  @Column()
-  last_name: string;
+  @Column({ nullable: false })
+  ip: string;
 
-  @Column({ unique: true })
-  username: string;
+  @Column({ unique: true, nullable: false })
+  signature: string;
 
-  @Column({ unique: true })
-  email: string;
-
-  @Column({ default: 0 })
-  verified: boolean;
-
-  @Column({ default: 0 })
-  vip: boolean;
-
-  @Column()
-  password: string;
+  @Column({ nullable: true })
+  device_info: string;
 
   @CreateDateColumn({
     type: 'timestamp',
@@ -49,4 +43,9 @@ export class User {
     onUpdate: 'CURRENT_TIMESTAMP(6)',
   })
   updated_at: Date;
+
+  @BeforeInsert()
+  generateUuid() {
+    this.uuid = uuidv4();
+  }
 }

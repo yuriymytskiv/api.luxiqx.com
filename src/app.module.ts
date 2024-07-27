@@ -7,6 +7,10 @@ import { PassportModule } from '@nestjs/passport';
 import { GlobalModule } from './global/global.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { ApplicationModule } from './application/application.module';
+import { ModelModule } from './model/model.module';
+import { SponsorModule } from './sponsor/sponsor.module';
+import { MetricModule } from './metric/metric.module';
 
 @Module({
   imports: [
@@ -28,6 +32,10 @@ import { AuthModule } from './auth/auth.module';
     GlobalModule,
     AuthModule,
     UserModule,
+    ApplicationModule,
+    ModelModule,
+    SponsorModule,
+    MetricModule,
   ],
   controllers: [AppController],
   providers: [AppService],

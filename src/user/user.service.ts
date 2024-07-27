@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { plainToClass } from 'class-transformer';
 import * as bcrypt from 'bcrypt';
-import { v4 as uuidv4 } from 'uuid';
 import { JwtService } from '@nestjs/jwt';
 import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -57,8 +56,6 @@ export class UserService {
       const hashedPassword = await bcrypt.hash(userData.password, 10);
       userData.password = hashedPassword;
       delete userData.passwordConfirm;
-      // Generate uuid for user
-      userData['uuid'] = uuidv4();
       // Saving user
       user = this.userRepository.create(userData);
       await this.userRepository.save(user);
