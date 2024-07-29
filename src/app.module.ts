@@ -11,6 +11,8 @@ import { ApplicationModule } from './application/application.module';
 import { ModelModule } from './model/model.module';
 import { SponsorModule } from './sponsor/sponsor.module';
 import { MetricModule } from './metric/metric.module';
+import { MailModule } from './mail/mail.module';
+import { AwsModule } from './aws/aws.module';
 
 @Module({
   imports: [
@@ -31,11 +33,13 @@ import { MetricModule } from './metric/metric.module';
     }),
     GlobalModule,
     AuthModule,
+    AwsModule,
+    MailModule,
+    MetricModule,
     UserModule,
     ApplicationModule,
     ModelModule,
     SponsorModule,
-    MetricModule,
   ],
   controllers: [AppController],
   providers: [AppService],

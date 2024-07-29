@@ -4,10 +4,7 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  BeforeInsert,
 } from 'typeorm';
-
-import { v4 as uuidv4 } from 'uuid';
 
 @Entity('model_applications')
 export class ModelApplication {
@@ -87,9 +84,4 @@ export class ModelApplication {
     onUpdate: 'CURRENT_TIMESTAMP(6)',
   })
   updated_at: Date;
-
-  @BeforeInsert()
-  generateUuid() {
-    this.uuid = uuidv4();
-  }
 }
