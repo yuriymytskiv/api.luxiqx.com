@@ -20,12 +20,11 @@ export class ApplicationFile {
   @Column({ nullable: false })
   file_path: string;
 
-  @Column({
-    nullable: false,
-    type: 'enum',
-    enum: ['image', 'video', 'audio', 'document'],
-  })
-  file_type: string;
+  @Column({ nullable: false, length: 50 })
+  file_mime: string;
+
+  @Column({ nullable: false, type: 'integer' })
+  file_size: number;
 
   @CreateDateColumn({
     type: 'timestamp',

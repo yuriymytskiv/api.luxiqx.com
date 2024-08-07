@@ -7,10 +7,12 @@ import { ApplicationFile } from './entity/application-file.entity';
 import { ApplicationController } from './application.controller';
 import { GlobalModule } from 'src/global/global.module';
 import { MailModule } from 'src/mail/mail.module';
+import { AwsModule } from 'src/aws/aws.module';
 
 @Module({
   imports: [
     GlobalModule,
+    AwsModule,
     MailModule,
     TypeOrmModule.forFeature([
       ModelApplication,

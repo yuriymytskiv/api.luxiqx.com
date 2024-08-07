@@ -28,7 +28,7 @@ export class UserFingerprint {
   @Column({ unique: true, nullable: false })
   signature: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, length: 300 })
   device_info: string;
 
   @CreateDateColumn({

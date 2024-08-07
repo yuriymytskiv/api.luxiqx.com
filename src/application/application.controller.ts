@@ -10,6 +10,7 @@ import { Request } from 'express';
 import { GlobalService } from 'src/global/global.service';
 import { ApplicationService } from './application.service';
 import { CreateModelApplicationDto } from './dto/create-model-application.dto';
+import { CreateSponsorApplicationDto } from './dto/create-sponsor-application.dto';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { MailService } from 'src/mail/mail.service';
 
@@ -50,6 +51,30 @@ export class ApplicationController {
       responseObject,
       createModelApplicationDto,
       files,
+    );
+  }
+
+  // Create a new application
+  @Post('sponsor')
+  async createSponsorApplication(
+    @Req() request: Request,
+    @Body() createSponsorApplicationDto: CreateSponsorApplicationDto,
+  ) {
+    // Create response object
+    const responseObject = this.globalService.createResponseObject(
+      request,
+      false,
+      500,
+    );
+    // Check if email is real
+    // const realEmail = await this.mailService.validateEmail(
+    //   createModelApplicationDto.email,
+    // );
+    // return realEmail;
+    // Create a new application
+    return await this.applicationService.createSponsorApplication(
+      responseObject,
+      createSponsorApplicationDto,
     );
   }
 }

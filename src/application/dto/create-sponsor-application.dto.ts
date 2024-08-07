@@ -2,10 +2,9 @@ import { ApiProperty } from '@nestjs/swagger';
 import {
   IsString,
   IsEmail,
-  IsPhoneNumber,
-  IsEnum,
   IsBoolean,
   IsOptional,
+  IsNotEmpty,
 } from 'class-validator';
 
 export class CreateSponsorApplicationDto {
@@ -31,10 +30,11 @@ export class CreateSponsorApplicationDto {
   contact_email: string;
 
   @ApiProperty({
-    description: 'Contact phone number for the sponsor application',
+    description: 'Phone number of the applicant',
     example: '+1234567890',
   })
-  @IsPhoneNumber(null)
+  @IsString()
+  @IsNotEmpty()
   contact_phone: string;
 
   @ApiProperty({
@@ -50,14 +50,6 @@ export class CreateSponsorApplicationDto {
   })
   @IsString()
   sponsorship_description: string;
-
-  @ApiProperty({
-    description: 'Status of the sponsor application',
-    example: 'Pending',
-    enum: ['Pending', 'Approved', 'Rejected'],
-  })
-  @IsEnum(['Pending', 'Approved', 'Rejected'])
-  status: string;
 
   @ApiProperty({
     description: 'Whether the contact email has been verified',
