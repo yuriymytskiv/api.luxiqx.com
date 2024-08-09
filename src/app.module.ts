@@ -4,9 +4,10 @@ import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PassportModule } from '@nestjs/passport';
+import { AuthModule } from './auth/auth.module';
 import { GlobalModule } from './global/global.module';
 import { UserModule } from './user/user.module';
-import { AuthModule } from './auth/auth.module';
+import { InquiryModule } from './inquiry/inquiry.module';
 import { ApplicationModule } from './application/application.module';
 import { ModelModule } from './model/model.module';
 import { SponsorModule } from './sponsor/sponsor.module';
@@ -37,6 +38,7 @@ import { AwsModule } from './aws/aws.module';
     MailModule,
     MetricModule,
     UserModule,
+    InquiryModule,
     ApplicationModule,
     ModelModule,
     SponsorModule,

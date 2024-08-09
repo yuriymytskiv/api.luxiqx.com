@@ -19,13 +19,13 @@ export class UserFingerprint {
   @Column({ unique: true })
   uuid: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   ga_code: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   ip: string;
 
-  @Column({ unique: true, nullable: false })
+  @Column({ nullable: true })
   signature: string;
 
   @Column({ nullable: true, length: 300 })
