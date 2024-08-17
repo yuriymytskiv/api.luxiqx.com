@@ -16,7 +16,7 @@ export class CreateUserFingerprintDto {
   })
   @IsString()
   @IsNotEmpty()
-  ip: string;
+  ip_address: string;
 
   @ApiProperty({
     description: 'Signature associated with the fingerprint',

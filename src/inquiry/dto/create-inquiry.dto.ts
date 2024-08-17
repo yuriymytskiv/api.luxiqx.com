@@ -68,5 +68,5 @@ export class CreateInquiryDto {
   })
   @IsOptional()
   @IsString()
-  user_metrics?: string;
+  user_object?: string;
 }

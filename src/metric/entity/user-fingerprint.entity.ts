@@ -11,7 +11,7 @@ import {
 import { v4 as uuidv4 } from 'uuid';
 
 @Entity('user_fingerprints')
-@Unique(['ga_code', 'ip']) // Define composite unique constraint
+@Unique(['ga_code', 'ip_address']) // Define composite unique constraint
 export class UserFingerprint {
   @PrimaryGeneratedColumn()
   id: number;
@@ -23,7 +23,7 @@ export class UserFingerprint {
   ga_code: string;
 
   @Column({ nullable: true })
-  ip: string;
+  ip_address: string;
 
   @Column({ nullable: true })
   signature: string;

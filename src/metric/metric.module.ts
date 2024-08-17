@@ -18,5 +18,6 @@ import { MetricController } from './metric.controller';
   ],
   providers: [MetricService],
   controllers: [MetricController],
+  exports: [MetricService],
 })
 export class MetricModule {}

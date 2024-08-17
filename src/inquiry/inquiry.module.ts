@@ -5,9 +5,15 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Inquiry } from './entity/inquiry.entity';
 import { GlobalModule } from 'src/global/global.module';
 import { MetricModule } from 'src/metric/metric.module';
+import { MailModule } from 'src/mail/mail.module';
 
 @Module({
-  imports: [GlobalModule, MetricModule, TypeOrmModule.forFeature([Inquiry])],
+  imports: [
+    GlobalModule,
+    MetricModule,
+    MailModule,
+    TypeOrmModule.forFeature([Inquiry]),
+  ],
   providers: [InquiryService],
   controllers: [InquiryController],
 })

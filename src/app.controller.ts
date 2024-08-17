@@ -8,6 +8,7 @@ import {
 import { AppService } from './app.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { FileService } from './aws/s3/file.service';
+import { Throttle } from '@nestjs/throttler';
 
 @Controller()
 export class AppController {
@@ -16,6 +17,7 @@ export class AppController {
     private readonly fileService: FileService,
   ) {}
 
+  @Throttle({ default: { limit: 3, ttl: 60000 } })
   @Get()
   hello(): any {
     return 200;
