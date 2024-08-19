@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert, BeforeUpdate } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert } from 'typeorm';
 
 import { v4 as uuidv4 } from 'uuid';
 
@@ -29,7 +29,6 @@ export class Inquiry {
   message: string;
 
   @BeforeInsert()
-  @BeforeUpdate()
   cleanPhone() {
     this.phone = this.phone.replace(/\D/g, '');
   }

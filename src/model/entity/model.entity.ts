@@ -7,8 +7,8 @@ import {
   BeforeInsert,
 } from 'typeorm';
 
-@Entity('model_applications')
-export class ModelApplication {
+@Entity('models')
+export class Model {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -24,9 +24,6 @@ export class ModelApplication {
   @Column({ nullable: false })
   email: string;
 
-  @Column({ nullable: true, default: false, type: 'tinyint' })
-  email_verified: number;
-
   @Column({ nullable: false })
   phone: string;
 
@@ -38,9 +35,6 @@ export class ModelApplication {
 
   @Column({ nullable: false, type: 'varchar', length: 1000 })
   self_description: string;
-
-  @Column({ nullable: false, type: 'varchar', length: 1000 })
-  interest_description: string;
 
   @Column({ nullable: true })
   height: string;
@@ -65,13 +59,6 @@ export class ModelApplication {
 
   @Column({ nullable: true })
   other_link: string;
-
-  @Column({
-    type: 'enum',
-    enum: ['Pending', 'Approved', 'Rejected'],
-    default: 'Pending',
-  })
-  status: string;
 
   @CreateDateColumn({
     type: 'timestamp',

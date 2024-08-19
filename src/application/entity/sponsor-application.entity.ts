@@ -4,6 +4,7 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  BeforeInsert,
 } from 'typeorm';
 
 @Entity('sponsor_applications')
@@ -54,4 +55,9 @@ export class SponsorApplication {
     onUpdate: 'CURRENT_TIMESTAMP(6)',
   })
   updated_at: Date;
+
+  @BeforeInsert()
+  cleanPhone() {
+    this.contact_phone = this.contact_phone.replace(/\D/g, '');
+  }
 }
