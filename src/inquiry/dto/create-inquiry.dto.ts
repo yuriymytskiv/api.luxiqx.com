@@ -23,7 +23,6 @@ export class CreateInquiryDto {
   })
   @IsString()
   @Length(1, 255)
-  @IsNotEmpty()
   company: string;
 
   @ApiProperty({

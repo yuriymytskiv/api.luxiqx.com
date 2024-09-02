@@ -98,7 +98,7 @@ export class ApplicationService {
           to: createModelApplicationDto.email,
           subject: 'Please confirm your email',
           text:
-            'https://luxiqx.com/confirm-email/' +
+            'https://luxiqx.com/application/confirm/' +
             createModelApplicationDto.uuid,
         };
 
@@ -168,7 +168,7 @@ export class ApplicationService {
           to: createSponsorApplicationDto.contact_email,
           subject: 'Please confirm your email',
           text:
-            'https://luxiqx.com/confirm-email/' +
+            'https://luxiqx.com/application/confirm/' +
             createSponsorApplicationDto.uuid,
         };
 
@@ -206,6 +206,43 @@ export class ApplicationService {
       await queryRunner.release();
     }
 
+    return responseObject;
+  }
+
+  // Confirm application
+  async confirmApplication(responseObject: any, uuid: string) {
+    // Check if model application exist with the uuid
+    const modelApplication = await this.modelApplicationRepository.findOne({
+      where: { uuid: uuid },
+    });
+    // If model application exist
+    if (modelApplication) {
+      // Update the application status
+      modelApplication.email_verified = 1;
+      await this.modelApplicationRepository.save(modelApplication);
+      // Prepare response object
+      responseObject.message = 'Application confirmed successfully.';
+      responseObject.status = true;
+      responseObject.statusCode = 200;
+      return responseObject;
+    }
+    // Check if sponsor application exist with the uuid
+    const sponsorApplication = await this.sponsorApplicationRepository.findOne({
+      where: { uuid: uuid },
+    });
+    // If sponsor application exist
+    if (sponsorApplication) {
+      // Update the application status
+      sponsorApplication.contact_email_verified = 1;
+      await this.sponsorApplicationRepository.save(sponsorApplication);
+      // Prepare response object
+      responseObject.message = 'Application confirmed successfully.';
+      responseObject.status = true;
+      responseObject.statusCode = 200;
+      return responseObject;
+    }
+    // If no model or sponsor application exist
+    responseObject.message = 'Invalid confirmation link.';
     return responseObject;
   }
 

@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Param,
   Post,
   Req,
   UploadedFiles,
@@ -75,6 +76,30 @@ export class ApplicationController {
     return await this.applicationService.createSponsorApplication(
       responseObject,
       createSponsorApplicationDto,
+    );
+  }
+
+  // Confirm application
+  @Post('confirm/:uuid')
+  async confirmApplication(
+    @Req() request: Request,
+    @Param('uuid') uuid: string,
+  ) {
+    // Create response object
+    const responseObject = this.globalService.createResponseObject(
+      request,
+      false,
+      500,
+    );
+    // If no uuid is provided
+    if (!uuid) {
+      responseObject.message = 'Invalid confirmation link.';
+      return responseObject;
+    }
+    // Confirm application
+    return await this.applicationService.confirmApplication(
+      responseObject,
+      uuid,
     );
   }
 }
