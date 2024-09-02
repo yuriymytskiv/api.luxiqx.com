@@ -98,7 +98,7 @@ export class ApplicationService {
           to: createModelApplicationDto.email,
           subject: 'Please confirm your email',
           text:
-            'https://luxiqx.com/application/confirm/' +
+            'https://api.luxiqx.com/application/confirm/' +
             createModelApplicationDto.uuid,
         };
 
@@ -168,7 +168,7 @@ export class ApplicationService {
           to: createSponsorApplicationDto.contact_email,
           subject: 'Please confirm your email',
           text:
-            'https://luxiqx.com/application/confirm/' +
+            'https://api.luxiqx.com/application/confirm/' +
             createSponsorApplicationDto.uuid,
         };
 
