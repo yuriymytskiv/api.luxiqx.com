@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   Param,
   Post,
   Req,
@@ -80,26 +81,17 @@ export class ApplicationController {
   }
 
   // Confirm application
-  @Post('confirm/:uuid')
+  @Get('confirm/:uuid')
   async confirmApplication(
     @Req() request: Request,
     @Param('uuid') uuid: string,
   ) {
-    // Create response object
-    const responseObject = this.globalService.createResponseObject(
-      request,
-      false,
-      500,
-    );
     // If no uuid is provided
     if (!uuid) {
-      responseObject.message = 'Invalid confirmation link.';
-      return responseObject;
+      // No application found
+      return `<a class='text-decoration: none;' href="https://luxiqx.com/">Invalid confirmation link. Click here to continue.</a>`;
     }
     // Confirm application
-    return await this.applicationService.confirmApplication(
-      responseObject,
-      uuid,
-    );
+    return await this.applicationService.confirmApplication(uuid);
   }
 }
