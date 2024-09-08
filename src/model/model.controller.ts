@@ -1,7 +1,9 @@
 import {
   Body,
   Controller,
+  Get,
   Post,
+  Query,
   Req,
   UploadedFiles,
   UseInterceptors,
@@ -18,6 +20,19 @@ export class ModelController {
     private globalService: GlobalService,
     private modelService: ModelService,
   ) {}
+
+  // Get models
+  @Get('/')
+  async getModels(@Req() request: Request, @Query() query) {
+    // Create response object
+    const responseObject = this.globalService.createResponseObject(
+      request,
+      false,
+      500,
+    );
+    // Get all models
+    return await this.modelService.getModels(responseObject, query);
+  }
 
   // Create a new model
   @Post('/')

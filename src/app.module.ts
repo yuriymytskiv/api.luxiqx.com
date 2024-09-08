@@ -15,6 +15,7 @@ import { MetricModule } from './metric/metric.module';
 import { MailModule } from './mail/mail.module';
 import { AwsModule } from './aws/aws.module';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { ExtraModule } from './extra/extra.module';
 
 @Module({
   imports: [
@@ -60,6 +61,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
     ApplicationModule,
     ModelModule,
     SponsorModule,
+    ExtraModule,
   ],
   controllers: [AppController],
   providers: [AppService],

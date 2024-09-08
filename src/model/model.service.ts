@@ -2,8 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Model } from './entity/model.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ModelFile } from './entity/model-file.entity';
-import { DataSource, Repository } from 'typeorm';
-import { MailService } from 'src/mail/mail.service';
+import { DataSource, Like, Repository } from 'typeorm';
 import { FileService } from 'src/aws/s3/file.service';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -17,6 +16,56 @@ export class ModelService {
     private readonly dataSource: DataSource,
     private fileService: FileService,
   ) {}
+
+  async getModels(responseObject: any, query: any) {
+    try {
+      const { page, search } = query;
+      // Get models paginated by 20 with query
+      const models = await this.modelRepository.find({
+        // Search multiple fields lowercase or if substring exists // Example if search = j then John Doe will be returned // first_name Or last_name
+        where: [
+          { first_name: Like(`%${search}%`) },
+          { last_name: Like(`%${search}%`) },
+          { email: Like(`%${search}%`) },
+        ],
+        take: 20,
+        skip: page * 20 - 20,
+      });
+      // If no models found
+      if (!models) {
+        responseObject.message = 'No models found';
+        responseObject.data = [];
+        return responseObject;
+      }
+      // Attatch images to models if any exist
+      const modelLength = models.length;
+      for (let i = 0; i < modelLength; i++) {
+        const model = models[i];
+        //  mime: 'image%' to get only images
+        const files = await this.modelFileRepository.find({
+          where: {
+            model_uuid: model.uuid,
+            file_mime: Like('%image%'),
+          },
+        });
+        model['files'] = files;
+      }
+      // If models found return models and pagination details
+      responseObject.status = true;
+      responseObject.message = 'Models found';
+      responseObject.data['models'] = models;
+      responseObject.data['pagination'] = {
+        total: models.length,
+        page: 1,
+      };
+      responseObject.data['query'] = query;
+      return responseObject;
+    } catch (error) {
+      responseObject.message = 'Failed to get models';
+      responseObject.data = [];
+      return responseObject;
+    }
+  }
 
   async createModel(responseObject: any, createModelDto: any, files: any) {
     // Create a query runner to manage the transaction
