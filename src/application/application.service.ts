@@ -94,19 +94,16 @@ export class ApplicationService {
 
         // Prepare email object
         const emailObject = {
-          from: 'support@ezvsx.com',
-          to: createModelApplicationDto.email,
+          to: [createModelApplicationDto.email],
           subject: 'Please confirm your email',
           text:
             'https://api.luxiqx.com/application/confirm/' +
             createModelApplicationDto.uuid,
+          type: 'verification',
         };
 
         // Send the email
-        const sendEmailResponse = await this.mailService.sendEmail(
-          emailObject,
-          'verification',
-        );
+        const sendEmailResponse = await this.mailService.sendMail(emailObject);
 
         if (!sendEmailResponse.emailSent) {
           // Rollback transaction if email sending failed
@@ -170,13 +167,11 @@ export class ApplicationService {
           text:
             'https://api.luxiqx.com/application/confirm/' +
             createSponsorApplicationDto.uuid,
+          type: 'verification',
         };
 
         // Send the email
-        const sendEmailResponse = await this.mailService.sendEmail(
-          emailObject,
-          'verification',
-        );
+        const sendEmailResponse = await this.mailService.sendMail(emailObject);
 
         // Check if the email was sent successfully
         if (sendEmailResponse.emailSent) {

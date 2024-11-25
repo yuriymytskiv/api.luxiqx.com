@@ -37,20 +37,22 @@ export class InquiryService {
         // Send confirmation email
         const emailObjectConfirmation = {
           from: 'support@ezvsx.com',
-          to: inquiry['email'],
+          to: [inquiry['email']],
           subject: 'Luxiqx Inquiry Confirmation',
           text: 'We received your inquiry and will get back to you soon.',
+          type: 'confirmation',
         };
         const emailObjectNotify = {
           from: 'support@ezvsx.com',
-          to: 'yuriy.myt@ezvsx.com',
+          to: ['yuriy.myt@ezvsx.com'],
           subject: 'New Inquiry',
           text:
             'Inquiry received. Please check the admin panel. Inquiry ID: ' +
             inquiry['uuid'],
+          type: 'notification',
         };
-        this.mailService.sendEmail(emailObjectConfirmation, 'confirmation');
-        this.mailService.sendEmail(emailObjectNotify, 'notify');
+        this.mailService.sendMail(emailObjectConfirmation);
+        this.mailService.sendMail(emailObjectNotify);
       } else {
         responseObject.message = 'Inquiry creation failed';
       }

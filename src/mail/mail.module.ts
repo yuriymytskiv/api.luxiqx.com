@@ -1,22 +1,30 @@
 import { Module } from '@nestjs/common';
 import { MailService } from './mail.service';
-import { MailgunModule } from 'nestjs-mailgun';
+import { MailController } from './mail.controller';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { EmailLog } from './entity/email-log.entity';
 import { EmailLogType } from './entity/email-log-type.entity';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { GlobalModule } from 'src/global/global.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([EmailLog, EmailLogType]),
-    MailgunModule.forRoot({
-      username: 'api',
-      key: process.env.MAILGUN_API_KEY,
-      // public_key: 'string', // OPTIONAL
-      // timeout: 'number', // OPTIONAL, in milliseconds
-      // url: 'string', // OPTIONAL, default: 'api.mailgun.net'. Note that if you are using the EU region the host should be set to 'api.eu.mailgun.net'
+    MailerModule.forRoot({
+      transport: {
+        host: process.env.MAIL_HOST,
+        secure: true, // Use TLS
+        port: parseInt(process.env.MAIL_PORT),
+        auth: {
+          user: process.env.MAIL_USERNAME,
+          pass: process.env.MAIL_PASSWORD,
+        },
+      },
     }),
+    TypeOrmModule.forFeature([EmailLog, EmailLogType]),
+    GlobalModule,
   ],
   providers: [MailService],
+  controllers: [MailController],
   exports: [MailService],
 })
 export class MailModule {}

@@ -1,67 +1,84 @@
 import { Injectable } from '@nestjs/common';
-import { MailgunService } from 'nestjs-mailgun';
-import { CreateEmailObjectDto } from './dto/create-email-object.dto';
+import { MailerService } from '@nestjs-modules/mailer';
 import { EmailLog } from './entity/email-log.entity';
-import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class MailService {
-  private readonly mailgunDomain;
   constructor(
+    private readonly mailerService: MailerService,
     @InjectRepository(EmailLog)
     private emailLogRepository: Repository<EmailLog>,
-    private mailgunService: MailgunService,
-  ) {
-    this.mailgunDomain = process.env.MAILGUN_DOMAIN;
-  }
+  ) {}
 
-  // Validate Email
-  async validateEmail(email: string): Promise<any> {
-    const response = await this.mailgunService.validateEmail(email);
-    console.log('Email Validation : ' + email + ' ', response);
-    return response;
-  }
-  // Send Email
-  async sendEmail(
-    createEmailObjectDto: CreateEmailObjectDto,
-    type: string,
-  ): Promise<{ emailSent: boolean; logCreated: boolean }> {
-    const emailObject = {
-      from: createEmailObjectDto.from,
-      to: createEmailObjectDto.to,
-      subject: createEmailObjectDto.subject,
-      text: createEmailObjectDto.text,
-      html: createEmailObjectDto.html,
-      attachment: createEmailObjectDto.attachment,
-      cc: createEmailObjectDto.cc,
-    };
-
-    let emailSent = false;
+  async sendMail({
+    to,
+    subject,
+    text,
+    html,
+    type,
+  }: {
+    to: string[];
+    subject: string;
+    text: string;
+    html?: string;
+    type?: string;
+  }): Promise<any> {
+    const toString = to.join(', ');
     let logCreated = false;
-
     try {
-      // Send email
-      const response = await this.mailgunService.createEmail(
-        this.mailgunDomain,
-        emailObject,
-      );
-
-      // If email is sent successfully
-      if (response.status === 200) {
-        emailSent = true;
-
-        // Create email log
-        emailObject['type'] = type;
-        const emailLog = this.emailLogRepository.create(emailObject);
-        await this.emailLogRepository.save(emailLog);
-
-        logCreated = true;
+      const response = {
+        success: false,
+        emailSent: false,
+        logCreated: logCreated,
+        error: null,
+      };
+      const payload = {
+        to: toString,
+        from: 'luxiqx@gmail.com',
+        subject: subject,
+        text: text,
+      };
+      if (html) {
+        payload['html'] = html;
       }
-    } catch (error) {
-      console.log('Error in sending email: ', error);
-    }
+      const mailResponse = await this.mailerService.sendMail(payload);
 
-    return { emailSent, logCreated };
+      if (mailResponse) {
+        logCreated = await this.createEmailLog(payload, type);
+        response.success = true;
+        response.emailSent = mailResponse.accepted.length > 0;
+        response.logCreated = logCreated;
+      } else {
+        response.success = false;
+        response.emailSent = false;
+        response.logCreated = false;
+      }
+      return response;
+    } catch (error) {
+      return {
+        success: false,
+        emailSent: false,
+        logCreated: false,
+        error: error.message,
+      };
+    }
+  }
+
+  private async createEmailLog(payload, type) {
+    try {
+      const emailLog = new EmailLog();
+      emailLog.to = payload.to;
+      emailLog.subject = payload.subject;
+      emailLog.text = payload.text;
+      emailLog.html = payload?.html ?? '';
+      emailLog.type = type;
+      await this.emailLogRepository.save(emailLog);
+      return true;
+    } catch (error) {
+      console.log('Error creating email log: ', error);
+      return false;
+    }
   }
 }

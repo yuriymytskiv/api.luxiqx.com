@@ -14,9 +14,6 @@ export class EmailLog {
   type: string;
 
   @Column()
-  from: string;
-
-  @Column()
   to: string;
 
   @Column()
@@ -27,12 +24,6 @@ export class EmailLog {
 
   @Column({ type: 'text', nullable: true })
   html: string;
-
-  @Column({ type: 'text', nullable: true })
-  attachment: string;
-
-  @Column({ type: 'text', nullable: true })
-  cc: string;
 
   @CreateDateColumn({
     type: 'timestamp',

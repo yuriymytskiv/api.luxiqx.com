@@ -23,7 +23,7 @@ export class ModelController {
 
   // Get models
   @Get('/')
-  async getModels(@Req() request: Request, @Query() query) {
+  async getModels(@Req() request: Request, @Query() query = {}) {
     // Create response object
     const responseObject = this.globalService.createResponseObject(
       request,
