@@ -1,11 +1,13 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
   Req,
   UploadedFiles,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { Request } from 'express';
@@ -15,6 +17,7 @@ import { CreateModelApplicationDto } from './dto/create-model-application.dto';
 import { CreateSponsorApplicationDto } from './dto/create-sponsor-application.dto';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { MailService } from 'src/mail/mail.service';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('application')
 export class ApplicationController {
@@ -77,6 +80,34 @@ export class ApplicationController {
     return await this.applicationService.createSponsorApplication(
       responseObject,
       createSponsorApplicationDto,
+    );
+  }
+
+  // Remove application
+  // @UseGuards(AuthGuard('jwt'))
+  @Delete('delete/:uuid')
+  async removeApplication(
+    @Req() request: Request,
+    @Param('uuid') uuid: string,
+  ) {
+    // Create response object
+    const responseObject = this.globalService.createResponseObject(
+      request,
+      false,
+      500,
+    );
+
+    // If no uuid is provided
+    if (!uuid) {
+      // No application found
+      responseObject.message = 'No application found';
+      return responseObject;
+    }
+
+    // Confirm application
+    return await this.applicationService.removeApplication(
+      responseObject,
+      uuid,
     );
   }
 

@@ -204,6 +204,69 @@ export class ApplicationService {
     return responseObject;
   }
 
+  // Remove application
+  async removeApplication(responseObject, uuid: string) {
+    // 3 Step process.
+    // 1. Check if model application exist with in model applications or sponsor applications
+    // 2. Get the application files.
+    // 3. Delete the application and the files
+    let targetApplication = null;
+    // Check if model application exist with the uuid
+    const modelApplication = await this.modelApplicationRepository.findOne({
+      where: { uuid: uuid },
+    });
+    // If model application exist
+    if (modelApplication) {
+      targetApplication = modelApplication;
+    }
+    // Check if sponsor application exist with the uuid
+    const sponsorApplication = await this.sponsorApplicationRepository.findOne({
+      where: { uuid: uuid },
+    });
+    // If sponsor application exist
+    if (sponsorApplication) {
+      targetApplication = sponsorApplication;
+    }
+    // If no application found
+    if (!targetApplication) {
+      responseObject.message = 'No application found.';
+      return responseObject;
+    }
+    // Get the application files
+    const applicationFiles = await this.applicationFileRepository.find({
+      where: { application_uuid: uuid },
+    });
+
+    const applicationFilesS3DirectoryPath = 'private/application/' + uuid;
+
+    // Create a query runner to manage the transaction
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      // Delete the application and the files
+      await queryRunner.manager.remove(targetApplication);
+      await queryRunner.manager.remove(applicationFiles);
+      await this.fileService.deleteFiles(applicationFilesS3DirectoryPath);
+      // Commit transaction if everything succeeded
+      await queryRunner.commitTransaction();
+      responseObject.message = 'Application deleted successfully.';
+      responseObject.status = true;
+      responseObject.statusCode = 200;
+    } catch (error) {
+      // Rollback transaction if an error occurs
+      await queryRunner.rollbackTransaction();
+      responseObject.message = 'Application deletion failed. Internal error.';
+      responseObject.errors.push(error.message);
+    } finally {
+      // Release the query runner
+      await queryRunner.release();
+    }
+
+    return responseObject;
+  }
+
   // Confirm application
   async confirmApplication(uuid: string) {
     // Check if model application exist with the uuid
