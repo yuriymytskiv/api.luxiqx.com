@@ -4,9 +4,7 @@ import { AuthService } from './auth.service';
 import { RequestTokenDto } from './dto/request-token.dto';
 import { RequestRefreshTokenDto } from './dto/request-refresh-token.dto';
 import { GlobalService } from 'src/global/global.service';
-import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
-@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(
@@ -14,20 +12,6 @@ export class AuthController {
     private authService: AuthService,
   ) {}
 
-  @ApiOkResponse({
-    description: 'Generated token successfully.',
-    schema: {
-      type: 'object',
-      properties: {
-        status: { type: 'boolean', example: true },
-        statusCode: { type: 'number', example: 200 },
-        path: { type: 'string', example: '/token' },
-        message: { type: 'string', example: '' },
-        errors: { type: 'array', items: { type: 'string' }, example: [] },
-        data: { type: 'object', example: {} },
-      },
-    },
-  })
   @Post('/token')
   async requestToken(
     @Req() request: Request,
@@ -55,20 +39,6 @@ export class AuthController {
     return responseObject;
   }
 
-  @ApiOkResponse({
-    description: 'Generated token successfully.',
-    schema: {
-      type: 'object',
-      properties: {
-        status: { type: 'boolean', example: true },
-        statusCode: { type: 'number', example: 200 },
-        path: { type: 'string', example: '/refresh-token' },
-        message: { type: 'string', example: '' },
-        errors: { type: 'array', items: { type: 'string' }, example: [] },
-        data: { type: 'object', example: {} },
-      },
-    },
-  })
   @Post('/refresh-token')
   async refreshToken(
     @Req() request: Request,

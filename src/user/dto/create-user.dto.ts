@@ -60,5 +60,5 @@ export class CreateUserDto {
     description: 'Password confirmation that must match the password field.',
   })
   @IsString({ message: 'Password confirmation is required.' })
-  passwordConfirm: string;
+  password_confirm: string;
 }

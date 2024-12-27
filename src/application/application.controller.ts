@@ -84,7 +84,7 @@ export class ApplicationController {
   }
 
   // Remove application
-  // @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('jwt'))
   @Delete('delete/:uuid')
   async removeApplication(
     @Req() request: Request,

@@ -3,9 +3,7 @@ import { Request } from 'express';
 import { UserService } from './user.service';
 import { GlobalService } from 'src/global/global.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
-@ApiTags('User')
 @Controller('user')
 export class UserController {
   constructor(
@@ -13,20 +11,6 @@ export class UserController {
     private userService: UserService,
   ) {}
 
-  @ApiOkResponse({
-    description: 'User created successfully.',
-    schema: {
-      type: 'object',
-      properties: {
-        status: { type: 'boolean', example: true },
-        statusCode: { type: 'number', example: 201 },
-        path: { type: 'string', example: '/user' },
-        message: { type: 'string', example: 'User created successfully.' },
-        errors: { type: 'array', items: { type: 'string' }, example: [] },
-        data: { type: 'object', example: {} },
-      },
-    },
-  })
   @Post('/')
   async createUser(
     @Req() request: Request,
@@ -37,6 +21,16 @@ export class UserController {
       false,
       500,
     );
+    // Check master password in headers as master_password
+    if (
+      !process.env.USER_CREATION ||
+      request.headers.master_password !== process.env.MASTER_PASSWORD
+    ) {
+      responseObject.statusCode = 401;
+      responseObject.message = 'Unauthorized';
+      return responseObject;
+    }
+
     return this.userService.create(createUserDto, responseObject);
   }
 }

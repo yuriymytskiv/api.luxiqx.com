@@ -42,7 +42,7 @@ export class UserService {
     // User
     let user: UserResponseDto;
     // Check if passwords are the same
-    const passwordNoMatch = userData.password !== userData.passwordConfirm;
+    const passwordNoMatch = userData.password !== userData.password_confirm;
     // Check if the email is in use or not
     const existingUser = await this.userRepository.findOne({
       where: [{ username: userData.username }],
@@ -55,7 +55,7 @@ export class UserService {
       // Password
       const hashedPassword = await bcrypt.hash(userData.password, 10);
       userData.password = hashedPassword;
-      delete userData.passwordConfirm;
+      delete userData.password_confirm;
       // Saving user
       user = this.userRepository.create(userData);
       await this.userRepository.save(user);
