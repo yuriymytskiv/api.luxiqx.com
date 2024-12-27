@@ -72,11 +72,12 @@ export class UserService {
 
       const tokens = {
         accessToken: this.jwtService.sign(payload, {
-          expiresIn: '30d',
+          expiresIn: process.env.JWT_EXPIRATION,
         }),
         refreshToken: this.jwtService.sign(payload, {
-          expiresIn: '180d',
+          expiresIn: process.env.JWT_REFRESH_EXPIRATION,
         }),
+        expires_in: process.env.JWT_EXPIRATION_TIME,
       };
 
       if (user) {

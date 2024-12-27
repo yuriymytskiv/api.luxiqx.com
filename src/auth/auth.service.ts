@@ -12,20 +12,23 @@ export class AuthService {
   ) {}
 
   // Validate account function // This is whats used by passport. Don't change this unless you know what you are doing.
-  async validateUser(email, pass): Promise<any> {
-    const user = await this.userService.findByEmail(email);
+  async validateUser(emailOrUsername: string, pass: string): Promise<any> {
+    // Search for the user by either email or username
+    const user =
+      (await this.userService.findByEmail(emailOrUsername)) ||
+      (await this.userService.findByUsername(emailOrUsername));
+
     if (!user) {
       return null;
     }
+
     const isMatch = await bcrypt.compare(pass, user.password);
     if (!isMatch) {
       return null;
     }
-    if (user && isMatch) {
-      const { password, ...result } = user;
-      return result;
-    }
-    return null;
+
+    const { password, ...result } = user;
+    return result;
   }
 
   // Gain JWT token
@@ -50,7 +53,7 @@ export class AuthService {
       refreshToken: this.jwtService.sign(payload, {
         expiresIn: process.env.JWT_REFRESH_EXPIRATION,
       }),
-      expires_in: process.env.JWT_EXPIRATION,
+      expires_in: process.env.JWT_EXPIRATION_TIME,
     };
   }
   // Gain JWT token
@@ -78,7 +81,7 @@ export class AuthService {
       refreshToken: this.jwtService.sign(payload, {
         expiresIn: process.env.JWT_REFRESH_EXPIRATION,
       }),
-      expires_in: process.env.JWT_EXPIRATION,
+      expires_in: process.env.JWT_EXPIRATION_TIME,
     };
   }
 }
