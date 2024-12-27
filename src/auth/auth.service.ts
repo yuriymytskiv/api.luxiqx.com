@@ -47,10 +47,10 @@ export class AuthService {
       vip: user.vip,
     };
     return {
-      accessToken: this.jwtService.sign(payload, {
+      access_token: this.jwtService.sign(payload, {
         expiresIn: process.env.JWT_EXPIRATION,
       }),
-      refreshToken: this.jwtService.sign(payload, {
+      refresh_token: this.jwtService.sign(payload, {
         expiresIn: process.env.JWT_REFRESH_EXPIRATION,
       }),
       expires_in: process.env.JWT_EXPIRATION_TIME,
@@ -75,10 +75,10 @@ export class AuthService {
       vip: decodedJwtPayload.vip,
     };
     return {
-      accessToken: this.jwtService.sign(payload, {
+      access_token: this.jwtService.sign(payload, {
         expiresIn: process.env.JWT_EXPIRATION,
       }),
-      refreshToken: this.jwtService.sign(payload, {
+      refresh_token: this.jwtService.sign(payload, {
         expiresIn: process.env.JWT_REFRESH_EXPIRATION,
       }),
       expires_in: process.env.JWT_EXPIRATION_TIME,

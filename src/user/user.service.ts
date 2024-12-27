@@ -71,10 +71,10 @@ export class UserService {
       };
 
       const tokens = {
-        accessToken: this.jwtService.sign(payload, {
+        access_token: this.jwtService.sign(payload, {
           expiresIn: process.env.JWT_EXPIRATION,
         }),
-        refreshToken: this.jwtService.sign(payload, {
+        refresh_token: this.jwtService.sign(payload, {
           expiresIn: process.env.JWT_REFRESH_EXPIRATION,
         }),
         expires_in: process.env.JWT_EXPIRATION_TIME,
