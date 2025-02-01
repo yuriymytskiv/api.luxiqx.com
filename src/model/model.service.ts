@@ -85,7 +85,7 @@ export class ModelService {
         // Upload files if any
         const uploadedFiles = [];
 
-        if (files.length > 0) {
+        if (files && files.length > 0) {
           const fileLength = files.length;
           // Upload files to S3
           for (let i = 0; i < fileLength; i++) {
