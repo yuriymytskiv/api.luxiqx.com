@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Post,
   Query,
   Req,
@@ -32,6 +33,19 @@ export class ModelController {
     );
     // Get all models
     return await this.modelService.getModels(responseObject, query);
+  }
+
+  // Get model by id
+  @Get('/:id')
+  async getModelById(@Req() request: Request, @Param('id') id: string) {
+    // Create response object
+    const responseObject = this.globalService.createResponseObject(
+      request,
+      false,
+      500,
+    );
+    // Get model by id
+    return await this.modelService.getModelById(responseObject, id);
   }
 
   // Create a new model

@@ -67,6 +67,37 @@ export class ModelService {
     }
   }
 
+  async getModelById(responseObject: any, id: string) {
+    try {
+      // Get model by id
+      const model = await this.modelRepository.findOne({
+        where: { uuid: id },
+      });
+      // If no model found
+      if (!model) {
+        responseObject.message = 'Model not found';
+        responseObject.data = [];
+        return responseObject;
+      }
+      // Attatch images to model if any exist
+      const files = await this.modelFileRepository.find({
+        where: {
+          model_uuid: model.uuid,
+        },
+      });
+      model['files'] = files;
+      // If model found return model
+      responseObject.status = true;
+      responseObject.message = 'Model found';
+      responseObject.data = model;
+      return responseObject;
+    } catch (error) {
+      responseObject.message = 'Failed to get model';
+      responseObject.data = [];
+      return responseObject;
+    }
+  }
+
   async createModel(responseObject: any, createModelDto: any, files: any) {
     // Create a query runner to manage the transaction
     const queryRunner = this.dataSource.createQueryRunner();
