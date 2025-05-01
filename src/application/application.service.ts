@@ -269,6 +269,19 @@ export class ApplicationService {
 
   // Confirm application
   async confirmApplication(uuid: string) {
+    function notifyAdmin($uuid) {
+      const emailObjectNotify = {
+        from: 'support@ezvsx.com',
+        to: ['yuriy.myt@ezvsx.com'],
+        subject: 'New Inquiry',
+        text:
+          'Application received. Please check the admin panel. Application ID: ' +
+          uuid,
+        type: 'notification',
+      };
+      // Send the email
+      this.mailService.sendMail(emailObjectNotify);
+    }
     // Check if model application exist with the uuid
     const modelApplication = await this.modelApplicationRepository.findOne({
       where: { uuid: uuid },
@@ -278,6 +291,8 @@ export class ApplicationService {
       // Update the application status
       modelApplication.email_verified = 1;
       await this.modelApplicationRepository.save(modelApplication);
+      // Notify admin about the new application
+      notifyAdmin(uuid);
       // Responding with html
       return `<a class='text-decoration: none;' href="https://luxiqx.com/">Application confirmed. Click here to continue.</a>`;
     }
@@ -290,6 +305,8 @@ export class ApplicationService {
       // Update the application status
       sponsorApplication.contact_email_verified = 1;
       await this.sponsorApplicationRepository.save(sponsorApplication);
+      // Notify admin about the new application
+      notifyAdmin(uuid);
       // Responding with html
       return `<a class='text-decoration: none;' href="https://luxiqx.com/">Application confirmed. Click here to continue.</a>`;
     }

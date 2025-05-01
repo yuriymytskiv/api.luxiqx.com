@@ -48,7 +48,10 @@ export class InquiryService {
           subject: 'New Inquiry',
           text:
             'Inquiry received. Please check the admin panel. Inquiry ID: ' +
-            inquiry['uuid'],
+            inquiry['uuid'] +
+            '\n \n' +
+            'Inquiry Details: \n' +
+            (inquiry['message'] ?? ''),
           type: 'notification',
         };
         this.mailService.sendMail(emailObjectConfirmation);
