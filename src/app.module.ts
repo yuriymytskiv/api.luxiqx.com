@@ -9,7 +9,6 @@ import { GlobalModule } from './global/global.module';
 import { UserModule } from './user/user.module';
 import { InquiryModule } from './inquiry/inquiry.module';
 import { ApplicationModule } from './application/application.module';
-import { ModelModule } from './model/model.module';
 import { SponsorModule } from './sponsor/sponsor.module';
 import { MetricModule } from './metric/metric.module';
 import { MailModule } from './mail/mail.module';
@@ -59,7 +58,6 @@ import { ExtraModule } from './extra/extra.module';
     UserModule,
     InquiryModule,
     ApplicationModule,
-    ModelModule,
     SponsorModule,
     ExtraModule,
   ],
